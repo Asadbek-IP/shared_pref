@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_pref/model/user_model.dart';
+import 'package:shared_pref/services/pref.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,26 +10,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String? name="";
-
-  void savePref(String name) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString("name", name);
-  }
-  
-
-   Future<String>? getPref() async{
-   SharedPreferences pref = await SharedPreferences.getInstance();
-     return pref.getString("name")!;
-   }
-
-  showName(String name2){
+  String? email = "";
+  showName(UserModel user){
     setState(() {
-      name = name2;
+      email = user.email;
     });
   }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +25,6 @@ class _HomePageState extends State<HomePage> {
         children: [
           ElevatedButton(
             onPressed: () {
-              savePref("Husan");
             },
             child: const Text("save pref"),
           ),
@@ -47,14 +33,17 @@ class _HomePageState extends State<HomePage> {
           ),
           ElevatedButton(
             onPressed: () async{
-               getPref()!.then((value) => showName(value));
+             SharedPref.getPref().then((value) =>showName(value) );
+             SharedPref.getLogin().then((value) =>print(value));
+
+            
             },
             child: const Text("get pref"),
           ),
           const SizedBox(
             height: 10,
           ),
-          Text(name!),
+          Text(email!),
         ],
       )),
     );

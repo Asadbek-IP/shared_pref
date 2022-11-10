@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_pref/pages/home_page.dart';
+import 'package:shared_pref/pages/login_page.dart';
+import 'package:shared_pref/services/pref.dart';
 
 void main(List<String> args) {
 runApp(const MyApp());
@@ -16,10 +16,27 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   
+ bool? isLogin;
+
+login()async{
+  SharedPref.getLogin().then((value) {
+    isLogin = value;
+  });
+  print("sss ${isLogin =await SharedPref.getLogin()}}");
+}
+
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    login();
+    print("ishladii $isLogin");
+  }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
+    
+    return  MaterialApp(
+      home: isLogin==null? const LoginPage():const HomePage(),
     );
   }
 }
